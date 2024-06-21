@@ -1,0 +1,129 @@
+{% extends 'template/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ======= title ======= -->
+<section class="portfolio portfolio-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">
+                        wishlist
+                    </h3>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- ======= end title ======= -->
+
+{% if user.is_authenticated %}
+{% if wishlist_count == 0 %}
+<!--wishlist page if wishlist has no items-->
+<section class="portfolio">
+    <div class="container">
+        <div class="work-box" data-aos="fade-up" data-aos-anchor-placement='top-bottom'>
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="cart-empty-title">My Wishlist</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="work-img cart-img">
+                        <img src="/media/assets/img/cart img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6 col-md-3">
+                    <h5 class="cart-empty-text">No Wishlist Items Added Yet</h5>
+                    <a class="shop-now-btn" style="color: white;" href="{% url 'homepage' %}">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% else %}
+<!-- normal wishlist page -->
+<section class="portfolio">
+    <div class="container">
+        {% for wishlist_product in profile.wishlist_products.all %}
+        <div class="row">
+            <div class="col-11 col-md-8 work-box" data-aos="fade-up" data-aos-anchor-placement='top-bottom'>
+                <div class="row">
+                    <div class="col-6 col-md-5 work-img">
+                        <a href="{% url 'product_detail' slug=wishlist_product.slug %}">
+                            <img src="/media/{{ wishlist_product.image_url_1 }}" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-7 cart-text">
+                        <h3>{{ wishlist_product.title }}</h3>
+                        <div class="icon-class">
+                            <a href="{% url 'wishlist_update' product_id=wishlist_product.id %}">
+                                <span>
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="product-price">₹{{ wishlist_product.offer_price }}
+                            <span>₹{{ wishlist_product.original_price }}</span>
+                        </div>
+                        <div class="add-to-cart-btn-2">
+                            {% if wishlist_product in profile.cart_products.all %}
+                            <a href="{% url 'cart_update' product_id=wishlist_product.id %}" style="color: white">
+                                remove from cart</a>
+                            {% else %}
+                            <a href="{% url 'cart_update' product_id=wishlist_product.id %}" style="color: white">
+                                Add To Cart</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+
+{% else %}
+<!-- wishlist page if user is not authenticated-->
+<section class="portfolio sect-pt4">
+    <div class="container">
+        <div class="col-md-12" data-aos="fade-up" data-aos-anchor-placement='top-bottom'>
+            <div class="work-box">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="cart-empty-title">My Wishlist</h3>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="work-img cart-img">
+                            <img src="/media/assets/img/cart img.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-8">
+                            <h5 class="cart-empty-text">Missing Wishlist Items?</h5>
+                            <h6 class="cart-empty-text">Login to see the items u added previously</h6>
+                            <a class="shop-now-btn" style="margin: auto; width: 30%; color: #ffffff;"
+                               href="{% url 'login' %}">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+{% endblock %}

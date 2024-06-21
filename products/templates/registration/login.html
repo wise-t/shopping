@@ -1,0 +1,42 @@
+{% extends "template/base.html" %}
+{% block content %}
+
+<!-- ======= title ======= -->
+<section class="portfolio portfolio-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">
+                        {{ title }}
+                    </h3>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- ======= end title ======= -->
+
+
+<div class="login container">
+    <div class="row justify-content-center">
+        <div class="col-sm-7 col-md-6 col-lg-5 col-xl-5">
+            <div class="wrapper">
+                <form class="form-signin" method='POST' action='' enctype="multipart/form-data"
+                      style="margin-top: -30px; margin-bottom: -18px;">{% csrf_token %}
+                    {{form.as_p }}
+                    <br>
+                    <button class="btn btn-lg btn-primary btn-block" style="background: #1e4356;" type="submit">
+                        {{title}}
+                    </button>
+                    <br>
+                    {% if title == "login" %}<h6>Not Registered? <a href="{% url 'register' %}">Register Here</a></h6>{% endif %}
+                    {% if title == "register" %}<h6>Already Registered? <a href="{% url 'login' %}">Login Here</a></h6>{% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

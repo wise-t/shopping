@@ -1,0 +1,123 @@
+{% extends 'template/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ======= title ======= -->
+<section class="portfolio portfolio-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">
+                        Admin page
+                    </h3>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- ======= end title ======= -->
+
+{% if user.is_superuser or user.is_staff %}
+{% if order_count == 0 %}
+<!--cart page if cart has no items-->
+<section class="portfolio">
+    <div class="container">
+        <div class="work-box" data-aos="fade-up" data-aos-anchor-placement='top-bottom'>
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="cart-empty-title">Admin Page</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="work-img cart-img">
+                        <img src="/media/assets/img/cart img.png" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6 col-md-3">
+                    <h5 class="cart-empty-text">No Items Yet</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% else %}
+<!-- normal Cart page -->
+<section class="portfolio">
+    <div class="container">
+        {% for i in orders reversed %}
+        <div class="row">
+            <div class="col-11 col-md-8 work-box" data-aos="fade-up" data-aos-anchor-placement='top-bottom'>
+                <div class="row">
+                    <div class="col-6 col-md-5 work-img">
+                        <a href="{% url 'product_detail' slug=i.ordered_product.slug %}">
+                            <img src="/media/{{ i.ordered_product.image_url_1 }}" alt="" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-7 cart-text">
+                        <h6>ID {{ i.id }} ({{ i.ordered_product.title }})</h6>
+                        <h6>{{ i.customer.username }}</h6>
+                        <h6>Ordered On: {{ i.order_placed_date }}</h6>
+                        <h6 class="indicator">{{ i.get_status_display }}
+                            {% if i.status == 5 %}
+                            <span class="status-indicator-green"><i class="fas fa-check-circle"></i></span>
+                            {% elif i.status == 6 %}
+                            <span class="status-indicator-red"><i class="fas fa-check-circle"></i></span>
+                            {% elif i.status == 11 %}
+                            <span class="status-indicator-orange"><i class="fas fa-check-circle"></i></span>
+                            {% endif %}
+                        </h6>
+                        <div class="add-to-cart-btn-2">
+                            <a href="{% url 'admin_product_page' order_id=i.id %}" style="color: white;">Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+
+{% else %}
+<!--cart page if user is not authenticated-->
+<section class="portfolio sect-pt4">
+    <div class="container">
+        <div class="col-md-12" data-aos="fade-up" data-aos-anchor-placement='top-bottom'>
+            <div class="work-box">
+                <div class="row" style="padding: 20px 50px;">
+                    <div class="col">
+                        <h3>Admin Page</h3>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="work-img cart-img">
+                            <img src="/media/assets/img/cart img.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-8">
+                            <h5 class="cart-text">You are not Staff</h5>
+                            <h6 class="cart-text">Login with a staff account</h6>
+                            <a class="proceed-btn " style="margin: auto; width: 30%; color: #ffffff;"
+                               href="{% url 'login' %}">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+{% endblock %}

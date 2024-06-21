@@ -1,0 +1,157 @@
+{% extends 'template/base.html' %}
+{% load static %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{% static 'vendor/style_timeline.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<!-- ======= title ======= -->
+<section class="portfolio portfolio-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">
+                        Track order
+                    </h3>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- ======= end title ======= -->
+
+<br>
+<br>
+<br>
+
+
+{% if order.status in delivery_list1 %}
+<div class="container">
+    <div class="row">
+        <ul class="col-md-12 timeline" style="margin: auto;">
+            {% for number, inner_list in delivery_list.items %}
+            {% for status, date in inner_list.items %}
+            <li class="li {% if number <= order.status %}complete{% endif %}">
+                <div class="timestamp">
+                    <span class="date">
+                        {% if date == null %}
+                        ---
+                        {% else %}
+                        {{ date|date:"j M" }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="status">
+                    <h6> {{ status }} </h6>
+                </div>
+            </li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+{% elif order.status == 6 %}
+<div class="container">
+    <div class="row">
+        <ul class="col-md-12 timeline" style="margin: auto;">
+            {% for number, inner_list in delivery_list.items %}
+            {% for status, date in inner_list.items %}
+            <li class="li complete">
+                <div class="timestamp">
+                    <span class="date">
+                        {% if date == null %}
+                        ---
+                        {% else %}
+                        {{ date|date:"j M" }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="status-cancel">
+                    <h6> {{ status }} </h6>
+                </div>
+            </li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-8 col-md-4" style="text-align: center;padding-top: 30px">
+            <h3>Order Cancelled</h3>
+        </div>
+    </div>
+</div>
+
+{% elif order.status in return_list1 %}
+<div class="container">
+    <div class="row">
+        <ul class="col-md-12 timeline" style="margin: auto;">
+            {% for number, inner_list in return_list.items %}
+            {% for status, date in inner_list.items %}
+            <li class="li {% if number <= order.status %}complete{% endif %}">
+                <div class="timestamp">
+                    <span class="date">
+                        {% if date == null %}
+                        ---
+                        {% else %}
+                        {{ date|date:"j M" }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="status-return">
+                    <h6> {{ status }} </h6>
+                </div>
+            </li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+{% endif %}
+
+<br>
+<br>
+
+{% if order.status in cancel_list %}
+<div class="container">
+    <div class="row">
+        <div class="col-7 col-md-3" style="margin: auto;">
+            <a href="{% url 'admin_status_update' order_id=order.id status=6 %}"
+               style="color: white"
+               class="proceed-btn">Cancel Order
+            </a>
+        </div>
+    </div>
+</div>
+
+
+{% elif order.status == 5 %}
+<div class="container">
+    <div class="row">
+        <div class="col-7 col-md-3" style="margin: auto;">
+            <a href="{% url 'admin_status_update' order_id=order.id status=7 %}"
+               style="color: white"
+               class="proceed-btn">Return Order
+            </a>
+        </div>
+    </div>
+</div>
+
+
+{% endif %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{% endblock %}

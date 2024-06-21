@@ -1,0 +1,51 @@
+{% extends 'template/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- ======= title ======= -->
+<section class="portfolio portfolio-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">
+                        Notification
+                    </h3>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- ======= end title ======= -->
+
+<div class="notification">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <img src="/media/{{ notification.order.ordered_product.image_url_1 }}" alt="" class="img-fluid">
+            </div>
+            <div class="content col-6">
+                <h3 class="indicator">{{ notification.order.ordered_product.title }}
+                    {% if notification.order.status == 5 %}
+                    <span class="status-indicator-green"><i class="fas fa-check-circle"></i></span>
+                    {% elif notification.order.status == 6 %}
+                    <span class="status-indicator-red"><i class="fas fa-check-circle"></i></span>
+                    {% elif notification.order.status == 11 %}
+                    <span class="status-indicator-orange"><i class="fas fa-check-circle"></i></span>
+                    {% endif %}
+                </h3><h6>{{ notification.get_text_display }}</h6>
+                {% if notification.order.status < 5 %}
+                <h6><strong>Delivery</strong> Expected by {{ notification.order.delivered_date|date:"D, j M" }}</h6>
+                {% endif %}
+                <div class="track-btn">
+                    <a href="{% url 'track_order' order_id=notification.order.id %}" style="color: white">
+                        Track Order
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
